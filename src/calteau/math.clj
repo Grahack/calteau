@@ -3,7 +3,7 @@
 
 (def number
   "Parses a number."
-  (<$> read-string
+  (<$> read-string  ; safe since passes through the parser below
        (<+> (many1 digit))))
 
 (def variable
