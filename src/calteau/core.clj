@@ -16,8 +16,8 @@
 (def t-display
   "Parses a line like `Display ...`."
   (bind [_ (token* "Disp ")
-         var t-expr]
-    (return (list 'println var))))
+         expr t-expr]
+    (return (list 'println expr))))
 
 (def t-instruction
   "A line of a t-program."
