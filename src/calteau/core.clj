@@ -39,4 +39,4 @@
 
 (defn -main
   []
-  (println (src-to-clj "Input X\nDisp X\nDisp 6")))
+  (println "Sorry, it's only a library!"))
