@@ -3,11 +3,13 @@
 
 (def number
   "Parses a number."
-  (<+> (many1 digit)))
+  (<$> read-string
+       (<+> (many1 digit))))
 
 (def variable
   "Parses a variable."
-  upper)
+  (<$> #(symbol (str %))
+       upper))
 
 (def expr
   "Parses a math expression."
