@@ -7,7 +7,7 @@
   "Parses a line like `Input X`."
   (bind [_ (token* "Input ")
          var upper]
-    (return (list 'def var '(read-line)))))
+    (return (list 'def (symbol (str var)) '(read-line)))))
 
 (def t-expr
   "Parses an expression."
