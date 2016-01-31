@@ -1,5 +1,6 @@
 (ns calteau.core
-  (:require [blancas.kern.core :refer :all])
+  (:require [blancas.kern.core :refer :all]
+            [calteau.math :as math])
   (:gen-class))
 
 (def t-user-input
@@ -10,7 +11,7 @@
 
 (def t-expr
   "Parses an expression."
-  (<+> (many any-char)))
+  math/expr)
 
 (def t-display
   "Parses a line like `Display ...`."
@@ -38,4 +39,4 @@
 
 (defn -main
   []
-  (println (src-to-clj "Input X\nDisp X")))
+  (println (src-to-clj "Input X\nDisp X\nDisp 6")))
