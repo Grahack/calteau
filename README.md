@@ -1,6 +1,6 @@
 # calteau
 
-A Clojure app to ... well, that part is up to you.
+A Clojure lib to parse and convert source code from calculators.
 
 ## Usage
 
