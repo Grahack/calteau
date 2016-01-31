@@ -1,4 +1,5 @@
 (ns calteau.math
+  "Math expressions parsers"
   (:require [blancas.kern.core :refer :all]))
 
 (def number

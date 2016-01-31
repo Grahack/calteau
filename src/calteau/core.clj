@@ -1,4 +1,5 @@
 (ns calteau.core
+  "Entry point to parse and convert source code from calculators"
   (:require [blancas.kern.core :refer :all]
             [calteau.math :as math])
   (:gen-class))
@@ -20,7 +21,7 @@
     (return (list 'println expr))))
 
 (def t-instruction
-  "A line of a t-program."
+  "Parses a line of a t-program."
   (bind [instr (<|> t-user-input
                     t-display)
          _ (<|> new-line* eof)]
@@ -31,6 +32,9 @@
   (many t-instruction))
 
 (defn src-to-clj
+  "Convert a string containing a program to Clojure code.
+
+   For now it's only for T programs."
   [src]
   (let [st (parse t-prg src)]
     (if (:ok st)
@@ -38,5 +42,6 @@
       (with-out-str (print-error st)))))
 
 (defn -main
+  "Placeholder for future use..."
   []
   (println "Sorry, it's only a library!"))
