@@ -29,8 +29,10 @@
   (let [operand1 (lookup-operator op1)
         operand2 (lookup-operator op2)]
     (or
-     (and (= 'left (:associativity operand1)) (<= (:precedence operand1) (:precedence operand2)))
-     (and (= 'right (:associativity operand1)) (<= (:precedence operand1) (:precedence operand2))))))
+      (and (= 'left (:associativity operand1))
+           (<= (:precedence operand1) (:precedence operand2)))
+      (and (= 'right (:associativity operand1))
+           (<= (:precedence operand1) (:precedence operand2))))))
 
 (defn- open-bracket? [op]
   (= op \())
@@ -50,23 +52,26 @@
              remainder (rest expr)]
          (cond
 
-           (number? token) (lazy-seq
-                             (cons token (shunting-yard remainder stack)))
+           (number? token)
+             (lazy-seq (cons token (shunting-yard remainder stack)))
 
-           (operator? token) (if (operator? (first stack))
-                               (lazy-seq
-                                 (concat (take-while (partial op-compare token) stack)
-                                         (shunting-yard remainder
-                                                        (cons token
-                                                              (drop-while (partial op-compare token) stack)))))
-                               (shunting-yard remainder (cons token stack)))
+           (operator? token)
+             (if (operator? (first stack))
+               (lazy-seq
+                 (concat (take-while (partial op-compare token) stack)
+                         (shunting-yard remainder
+                                        (cons token
+                                              (drop-while (partial op-compare token) stack)))))
+               (shunting-yard remainder (cons token stack)))
 
-           (open-bracket? token) (shunting-yard remainder (cons token stack))
+           (open-bracket? token)
+             (shunting-yard remainder (cons token stack))
 
-           (close-bracket? token) (let [ops (take-while (comp not open-bracket?) stack)
-                                        ret (drop-while (comp not open-bracket?) stack)]
-                                    (assert (= (first ret) \())
-                                    (lazy-seq
-                                      (concat ops (shunting-yard remainder (rest ret)))))
+           (close-bracket? token)
+             (let [ops (take-while (comp not open-bracket?) stack)
+                   ret (drop-while (comp not open-bracket?) stack)]
+               (assert (= (first ret) \())
+               (lazy-seq
+                 (concat ops (shunting-yard remainder (rest ret)))))
 
            :else (assert false))))))
