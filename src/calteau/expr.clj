@@ -3,8 +3,8 @@
 
    Changes before inclusion in the repo:
 
-    * Quote ^ in `operators`.
-    * Remove trailing whitespace."
+   * Quote ^ in `operators`.
+   * Remove trailing whitespace."
   (:gen-class))
 
 (defstruct operator :name :precedence :associativity)
