@@ -20,3 +20,7 @@
   (is (= (pretty-print (expr/shunting-yard [4 + 5 + \( 6 * 7 \)] '(4 5 + 6 7 * +)))))
   (is (= (pretty-print (expr/shunting-yard [\( \( \( 6 * 7 \) \) \)] '(6 7 *)))))
   (is (= (pretty-print (expr/shunting-yard [3 + 4 * 5])) '(3 4 5 * +))))
+
+(deftest test-rpn2pn
+  (is (= (expr/rpn2pn '(0 1 +)) '(+ 0 1)))
+  (is (= (expr/rpn2pn '(3 4 5 * 3 2 + / +)) '(+ 3 (/ (* 4 5) (+ 3 2))))))

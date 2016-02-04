@@ -75,3 +75,21 @@
                  (concat ops (shunting-yard remainder (rest ret)))))
 
            :else (assert false))))))
+
+(defn rpn2pn [tokens]
+  "Taken from http://eddmann.com/posts/infix-calculator-in-clojure/
+
+  Changes before inclusion in the repo:
+
+  * {\"+\" +, ...}] -> #{'+ '- '* '/}, because we have symbols not strings
+  * add 'list before (ops token), because we don't eval, we build up
+  * (ops token) -> token, because of the first change
+  * (read-string token) -> token, because we have symbols not strings"
+  (let [ops #{'+ '- '* '/}]
+    (first
+      (reduce
+        (fn [stack token]
+          (if (contains? ops token)
+            (cons (list token (second stack) (first stack)) (drop 2 stack))
+            (cons token stack)))
+        [] tokens))))
