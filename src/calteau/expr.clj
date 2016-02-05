@@ -1,30 +1,25 @@
 (ns calteau.expr
-  "Taken from http://www.fatvat.co.uk/2009/06/shunting-yard-algorithm.html
-
-   Changes before inclusion in the repo:
-
-   * Quote ^ in `operators`.
-   * Remove trailing whitespace."
+  "Tools for parsing the structure of math expressions"
   (:gen-class))
 
-(defstruct operator :name :precedence :associativity)
+(defstruct ^:private operator :name :precedence :associativity)
 
-(def operators
+(def ^:private operators
      #{(struct operator + '1 'left)
        (struct operator - '1 'left)
        (struct operator * '2 'left)
        (struct operator / '2 'left)
        (struct operator '\^ 3 'right)})
 
-(defn lookup-operator
+(defn- lookup-operator
   [symb]
   (first (filter (fn [x] (= (:name x) symb)) operators)))
 
-(defn operator?
+(defn- operator?
   [op]
   (not (nil? (lookup-operator op))))
 
-(defn op-compare
+(defn- op-compare
   [op1 op2]
   (let [operand1 (lookup-operator op1)
         operand2 (lookup-operator op2)]
@@ -41,6 +36,14 @@
   (= op \)))
 
 (defn shunting-yard
+  "Convert an array of symbols (infix) into a list (RPN) using the famous algo
+
+   Taken from <http://www.fatvat.co.uk/2009/06/shunting-yard-algorithm.html>.
+
+   Changes before inclusion in the repo:
+
+   * Quote `^` in `operators`.
+   * Remove trailing whitespace."
   ([expr]
      (shunting-yard expr []))
   ([expr stack]
@@ -76,15 +79,18 @@
 
            :else (assert false))))))
 
-(defn rpn2pn [tokens]
-  "Taken from http://eddmann.com/posts/infix-calculator-in-clojure/
+(defn rpn2pn
+  "Convert a list of symbols (RPN) into a Clojure expression (PN)
 
-  Changes before inclusion in the repo:
+   Taken from <http://eddmann.com/posts/infix-calculator-in-clojure/>.
 
-  * {\"+\" +, ...}] -> #{'+ '- '* '/}, because we have symbols not strings
-  * add 'list before (ops token), because we don't eval, we build up
-  * (ops token) -> token, because of the first change
-  * (read-string token) -> token, because we have symbols not strings"
+   Changes before inclusion in the repo:
+
+   * `{\"+\" +, ...}]` -> `#{'+ '- '* '/}`, because we have symbols not strings
+   * add `list` before `(ops token)`, because we don't eval, we build up
+   * `(ops token)` -> `token`, because of the first change
+   * `(read-string token)` -> `token`, because we have symbols not strings"
+  [tokens]
   (let [ops #{'+ '- '* '/}]
     (first
       (reduce

@@ -22,5 +22,6 @@
   (is (= (pretty-print (expr/shunting-yard [3 + 4 * 5])) '(3 4 5 * +))))
 
 (deftest test-rpn2pn
-  (is (= (expr/rpn2pn '(0 1 +)) '(+ 0 1)))
+  (is (= (expr/rpn2pn '(1 1 +)) '(+ 1 1)))
+  (is (= (expr/rpn2pn '(A B *)) '(* A B)))
   (is (= (expr/rpn2pn '(3 4 5 * 3 2 + / +)) '(+ 3 (/ (* 4 5) (+ 3 2))))))
